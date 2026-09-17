@@ -44,6 +44,11 @@ a {
 }
 
 .brand {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
   font-size: 1.125rem;
   font-weight: 800;
   letter-spacing: -0.04em;
@@ -51,7 +56,11 @@ a {
 }
 
 .text-link {
-  min-height: 2.75rem;
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
   padding: 0.75rem;
   color: var(--muted);
   font-weight: 600;
