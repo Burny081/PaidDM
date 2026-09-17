@@ -8,6 +8,7 @@
   --accent: #16794d;
   --accent-foreground: #ffffff;
   --danger: #b42318;
+  --surface: #ffffff;
 }
 
 * {
@@ -30,12 +31,14 @@ a {
   color: inherit;
 }
 
-.landing-page {
+.landing-page,
+.app-page {
   min-height: 100vh;
   padding: 1.25rem;
 }
 
-.site-header {
+.site-header,
+.app-header {
   display: flex;
   max-width: 72rem;
   align-items: center;
@@ -55,7 +58,8 @@ a {
   text-decoration: none;
 }
 
-.text-link {
+.text-link,
+.app-nav a {
   display: inline-flex;
   min-width: 44px;
   min-height: 44px;
@@ -64,6 +68,17 @@ a {
   padding: 0.75rem;
   color: var(--muted);
   font-weight: 600;
+}
+
+.app-nav {
+  display: flex;
+  gap: 0.25rem;
+  overflow-x: auto;
+}
+
+.app-nav a {
+  font-size: 0.875rem;
+  text-decoration: none;
 }
 
 .hero {
@@ -115,13 +130,249 @@ a {
   text-decoration: none;
 }
 
+.button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--accent);
+  border-radius: 0.5rem;
+  background: var(--accent);
+  color: var(--accent-foreground);
+  padding: 0.75rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.button:hover,
+.primary-action:hover {
+  background: #0d613b;
+}
+
+.button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.button-wide {
+  width: 100%;
+}
+
 a:focus-visible {
   outline: 3px solid var(--foreground);
   outline-offset: 3px;
 }
 
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.landing-section,
+.security-note,
+.site-footer {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.landing-section {
+  padding: 4rem 0;
+}
+
+.landing-section h2 {
+  max-width: 18ch;
+  margin: 0.75rem 0 0;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.steps {
+  display: grid;
+  gap: 1rem;
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps li {
+  display: flex;
+  min-height: 6rem;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.steps span {
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.creator-section {
+  display: grid;
+  gap: 2rem;
+}
+
+.section-copy,
+.auth-panel > p:not(.eyebrow),
+.onboarding-panel > p:not(.eyebrow) {
+  max-width: 34rem;
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+  padding: 1.25rem;
+}
+
+.creator-card {
+  display: grid;
+  max-width: 25rem;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.75rem;
+}
+
+.avatar {
+  width: 3rem;
+  height: 3rem;
+  grid-row: span 2;
+  border-radius: 50%;
+  background: #dce3dd;
+  object-fit: cover;
+}
+
+.creator-name,
+.creator-handle,
+.creator-bio,
+.creator-price {
+  margin: 0;
+}
+
+.creator-name,
+.creator-price {
+  font-weight: 800;
+}
+
+.creator-handle,
+.creator-bio {
+  color: var(--muted);
+}
+
+.creator-bio,
+.creator-price {
+  grid-column: 1 / -1;
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+
+.security-note {
+  margin-top: 2rem;
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.25rem;
+  color: var(--muted);
+}
+
+.security-note strong {
+  color: var(--foreground);
+}
+
+.site-footer {
+  padding: 3rem 0 1rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.auth-panel,
+.onboarding-panel {
+  display: grid;
+  max-width: 32rem;
+  gap: 1.25rem;
+  margin: 5rem auto;
+}
+
+.auth-panel h1,
+.onboarding-panel h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 9vw, 4.5rem);
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+}
+
+.profile-form {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.field label,
+.creator-name {
+  font-weight: 700;
+}
+
+.input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+  color: var(--foreground);
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+}
+
+.textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.field-hint,
+.field-error {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.field-hint {
+  color: var(--muted);
+}
+
+.field-error {
+  color: var(--danger);
+  font-weight: 700;
+}
+
 @media (min-width: 48rem) {
   .landing-page {
     padding: 2rem;
+  }
+
+  .app-page {
+    padding: 2rem;
+  }
+
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .creator-section {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
   }
 }
