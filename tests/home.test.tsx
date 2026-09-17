@@ -10,3 +10,9 @@ it("presents the paid-message value proposition", () => {
     screen.getByRole("link", { name: /create your paiddm/i }),
   ).toHaveAttribute("href", "/login");
 });
+
+it("uses deterministic initials for the representative creator avatar", () => {
+  render(<HomePage />);
+
+  expect(screen.getByText("IA")).toHaveAttribute("aria-hidden", "true");
+});

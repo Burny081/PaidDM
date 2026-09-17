@@ -37,7 +37,7 @@ export const Field = forwardRef<HTMLInputElement, FieldProps>(function Field(
         aria-invalid={error ? true : ariaInvalid}
       />
       {hint ? <p id={hintId} className="field-hint">{hint}</p> : null}
-      {error ? <p id={errorId} className="field-error">{error}</p> : null}
+      {error ? <p id={errorId} className="field-error" role="alert">{error}</p> : null}
     </div>
   );
 });

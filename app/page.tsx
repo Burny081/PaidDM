@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { AppHeader } from "@/components/app-header";
-import { Avatar } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 
 const steps = ["Set your price", "Receive a message", "Get paid"];
@@ -44,7 +43,7 @@ export default function HomePage() {
           </p>
         </div>
         <Card className="creator-card">
-          <Avatar src="/avatars/idris.png" alt="" />
+          <span className="avatar avatar-initials" aria-hidden="true">IA</span>
           <div>
             <p className="creator-name">Idris Adeyemi</p>
             <p className="creator-handle">@idris</p>

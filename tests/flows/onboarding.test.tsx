@@ -35,7 +35,8 @@ describe("ProfileForm", () => {
 
     await user.click(screen.getByRole("button", { name: /save profile/i }));
 
-    expect(await screen.findByText(/must be greater than 0/i)).toBeInTheDocument();
+    const priceError = await screen.findByText(/must be greater than 0/i);
+    expect(priceError).toHaveAttribute("role", "alert");
     expect(store?.state.profiles.find((profile) => profile.userId === "user-idris")).toMatchObject({
       slug: "idris",
       dmPrice: 2,

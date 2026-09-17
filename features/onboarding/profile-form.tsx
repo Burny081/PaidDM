@@ -49,7 +49,7 @@ export function ProfileForm({ onComplete }: ProfileFormProps) {
       <div className="field">
         <label htmlFor="profile-bio">Short bio</label>
         <textarea id="profile-bio" className="input textarea" name="bio" maxLength={160} value={values.bio} aria-describedby={errors.bio ? "profile-bio-error" : undefined} aria-invalid={Boolean(errors.bio) || undefined} onChange={(event) => updateField("bio", event.target.value)} disabled={isSubmitting} />
-        {errors.bio ? <p id="profile-bio-error" className="field-error">{errors.bio}</p> : null}
+        {errors.bio ? <p id="profile-bio-error" className="field-error" role="alert">{errors.bio}</p> : null}
       </div>
       <Field label="Price per message" name="dmPrice" type="number" min="0.01" step="0.01" inputMode="decimal" value={values.dmPrice} onChange={(event) => updateField("dmPrice", event.target.value)} hint="USDC on Robinhood Chain Testnet (simulated)." error={errors.dmPrice} disabled={isSubmitting} />
       <Button type="submit" className="button-wide" disabled={isSubmitting}>{isSubmitting ? "Saving profile…" : "Save profile"}</Button>
