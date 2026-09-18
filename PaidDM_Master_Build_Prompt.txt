@@ -1,0 +1,554 @@
+PAIDDM — MASTER BUILD PROMPT Robinhood Chain Testnet MVP Version:
+September 2026
+
+ROLE You are the lead full-stack engineer building PaidDM from scratch.
+
+PaidDM is a simple paid-messaging platform: “Pay to get your message
+seen.”
+
+A user logs in with X (Twitter), receives an embedded crypto wallet,
+creates a public PaidDM profile, and can receive paid private messages
+from other users.
+
+For V1, keep the product extremely simple. The goal is a fully
+functional TESTNET MVP with $0 of the developer’s own money.
+
+IMPORTANT - Do not invent APIs, contract addresses, chain IDs, RPC URLs,
+token addresses, wallet-provider configuration, or X OAuth
+requirements. - Before implementing blockchain-specific details, verify
+them against CURRENT OFFICIAL documentation. - Prefer official Robinhood
+Chain docs, official X docs, and official wallet-provider docs. - If a
+detail cannot be verified, clearly identify it instead of guessing. -
+Never put private message content on-chain. - Never store users’ private
+keys yourself. - Do not build a custom cryptographic wallet system when
+an embedded-wallet provider can safely handle it.
+
+PRODUCT
+
+Name: PaidDM
+
+Core idea: A user can pay another user/creator to send them a private
+message.
+
+Example: Creator: @idris PaidDM page: https://paiddm.xyz/@idris Price:
+$2
+
+Sender: 1. Opens the creator’s PaidDM page 2. Writes a private message
+3. Clicks Pay & Send 4. Completes the blockchain transaction 5. Payment
+is confirmed 6. The message becomes visible in the creator’s dashboard
+
+The creator can then read and reply.
+
+V1 PRODUCT SCOPE
+
+BUILD ONLY: 1. Landing page 2. Continue with X login 3. User account 4.
+Embedded wallet 5. Public PaidDM profile 6. Creator sets one DM price 7.
+Sender writes a private message 8. Sender pays with a supported testnet
+token 9. Blockchain payment confirmation 10. Paid message appears in
+creator dashboard 11. Creator can reply 12. Basic wallet/balance display
+13. Basic transaction history
+
+DO NOT BUILD YET: - subscriptions - tips - video calls - voice calls -
+NFT functionality - social feed - recommendation algorithms - token
+launch - DAO - mobile app - fiat on-ramp - advanced analytics -
+automatic refunds - unnecessary AI features
+
+The MVP should prove: A person can authenticate, obtain a wallet, pay
+another user on Robinhood Chain testnet, and have a private message
+delivered after payment confirmation.
+
+TARGET USER FLOW
+
+NEW USER: Landing page -> Continue with X -> X OAuth -> PaidDM account
+-> embedded wallet -> choose DM price -> public profile
+
+SENDER: Visit creator page -> see creator + DM price -> write message ->
+use embedded wallet -> confirm payment -> Robinhood Chain testnet ->
+backend verifies -> message becomes PAID -> creator receives message
+
+CREATOR: Login -> Dashboard -> New Paid Message -> Read message -> Reply
+
+TECH STACK
+
+Frontend: - Next.js - React - TypeScript - Tailwind CSS - shadcn/ui
+where useful
+
+Backend: - Next.js API routes or lightweight Node backend
+
+Database: - Supabase PostgreSQL
+
+Authentication: - X OAuth 2.0 Authorization Code Flow with PKCE - Use
+the minimum X scopes necessary
+
+Embedded wallet: - Investigate and select Privy OR Dynamic based on
+CURRENT documentation and actual Robinhood Chain compatibility. - Do not
+assume custom-network support; verify it first. - Do not expose private
+keys to the application backend.
+
+Blockchain: - Robinhood Chain TESTNET
+
+Smart contracts: - Solidity - OpenZeppelin - Foundry or Hardhat
+
+Blockchain client: - viem and/or wagmi
+
+Hosting: - Vercel or another genuinely free option suitable for the MVP
+
+RPC: - Robinhood’s official public testnet RPC if currently available -
+Otherwise a reputable free RPC provider - Verify current endpoint before
+implementation
+
+ZERO-COST REQUIREMENT
+
+The entire MVP should be developed and demonstrated with $0 of personal
+spending.
+
+Use: - Robinhood testnet - testnet ETH from official faucet - test
+tokens from official faucet where available - free X OAuth/login
+functionality - free database tier - free hosting tier - free
+wallet-provider tier - free RPC/public endpoint where possible
+
+Do NOT: - purchase real ETH - purchase USDC/USDG - deploy to mainnet -
+buy a domain - purchase an API subscription - purchase a paid wallet
+plan
+
+If any component actually requires money before development can proceed,
+stop and tell me which component, why, and how much.
+
+CRITICAL ROBINHOOD CHAIN RESEARCH
+
+Before writing blockchain code, verify CURRENT official information:
+
+-   Mainnet status
+-   Testnet status
+-   EVM compatibility
+-   Mainnet chain ID
+-   Testnet chain ID
+-   Testnet RPC
+-   Mainnet RPC
+-   Testnet explorer
+-   Mainnet explorer
+-   Native gas token
+-   Official faucet
+-   Supported testnet tokens
+-   Exact testnet token contract address
+-   Exact decimals
+-   Whether ERC-20 transfers work normally
+-   Smart-contract deployment requirements
+-   Any developer registration requirements
+-   Any Robinhood platform/developer fees
+-   Current network gas requirements
+-   Current restrictions
+
+Do not use an unverified token address.
+
+If the official docs list USDG rather than USDC as the primary
+stablecoin, use whichever supported testnet token is actually available
+and documented for development.
+
+The contract must receive the token address through
+configuration/environment rather than using an unverified hardcoded
+address.
+
+X AUTHENTICATION
+
+Implement: Continue with X
+
+Use current X OAuth documentation.
+
+Requirements: - OAuth 2.0 - Authorization Code Flow with PKCE if
+appropriate - Secure state/PKCE handling - Callback URL - Server-side
+token handling where appropriate - Retrieve only necessary identity
+information - Store X user ID as the stable external identifier - Do not
+use X username as a wallet private-key derivation input - Do not derive
+wallets from usernames - Do not store X passwords
+
+At minimum associate: users.id users.x_user_id users.x_username
+users.display_name users.avatar_url
+
+Use X user ID as the stable identifier, not username.
+
+WALLET ARCHITECTURE
+
+Use an embedded-wallet provider.
+
+Desired experience: Continue with X -> PaidDM account -> Wallet
+automatically available
+
+The application should store only: - wallet address - wallet-provider
+user/wallet identifier if required
+
+The application must NOT store: - private key - seed phrase - raw
+signing secret
+
+The wallet must be associated with the PaidDM account after successful
+authentication.
+
+Do not make X itself the wallet.
+
+DATABASE
+
+Use PostgreSQL/Supabase.
+
+Suggested schema:
+
+users - id - x_user_id - x_username - display_name - avatar_url -
+wallet_address - wallet_provider_user_id - created_at - updated_at
+
+profiles - id - user_id - slug - bio - dm_price - currency - is_active -
+created_at - updated_at
+
+messages - id - sender_user_id - creator_user_id - profile_id -
+content_encrypted - payment_status - payment_id - tx_hash - amount -
+token_address - created_at - paid_at - read_at - replied_at
+
+payments - id - message_id - sender_user_id - creator_user_id -
+tx_hash - chain_id - token_address - amount - status - created_at -
+confirmed_at
+
+replies - id - message_id - creator_user_id - content_encrypted -
+created_at
+
+Add appropriate indexes and unique constraints.
+
+PRIVATE MESSAGE STORAGE
+
+Message content is OFF-CHAIN.
+
+Never put message text on Robinhood Chain.
+
+Possible on-chain information: - sender wallet - creator wallet -
+amount - token - message/payment ID hash - transaction event
+
+Database contains: - encrypted message content - sender - recipient -
+timestamp - payment status
+
+Use TLS in transit and encryption at rest.
+
+Only the sender and intended creator should access the message.
+
+SMART CONTRACT
+
+Create the smallest secure contract possible.
+
+Concept: payForMessage(creator, amount, messageId)
+
+The contract: 1. verifies amount 2. verifies creator is valid 3.
+transfers supported ERC-20 token from sender 4. optionally splits
+platform fee 5. transfers creator portion to creator 6. emits an event
+7. prevents replay/double payment where appropriate
+
+Example event: PaidMessage(bytes32 indexed messageId, address indexed
+sender, address indexed creator, uint256 amount)
+
+The message ID is an identifier/hash, NOT message content.
+
+Use OpenZeppelin SafeERC20.
+
+For V1, keep the platform fee at 0% unless implementing a fee adds no
+unnecessary complexity.
+
+Avoid unnecessary upgradeability.
+
+Avoid complicated refund logic in V1.
+
+PAYMENT MODEL
+
+Example: Creator price: $2
+
+Sender: - holds testnet token - pays $2 - pays blockchain gas in testnet
+ETH
+
+Creator: - receives the token directly if the contract pushes payment -
+does not need a separate claim transaction
+
+PaidDM backend: - watches/polls blockchain - independently verifies
+transaction - verifies correct contract - verifies correct token -
+verifies sender - verifies creator - verifies amount - verifies
+message/payment ID - verifies confirmations - marks payment PAID
+
+Never mark a message as paid merely because the frontend says the
+transaction succeeded.
+
+PAYMENT VERIFICATION
+
+Backend must check: 1. Transaction exists 2. Transaction is on expected
+Robinhood Chain testnet 3. Transaction succeeded 4. Contract is the
+expected PaidDM contract 5. Token is the expected configured token 6.
+Correct payment event exists 7. messageId matches database record 8.
+creator matches expected wallet 9. sender matches expected wallet 10.
+amount is sufficient 11. payment has not already been used
+
+Only then set messages.payment_status = PAID.
+
+FRONTEND
+
+Create a clean, premium, minimal interface. Avoid generic
+crypto-dashboard aesthetics.
+
+Core pages: / Landing /login X login /onboarding Set profile/DM price
+/@username Public PaidDM page /dashboard Creator dashboard
+/dashboard/messages/[id] Message detail /settings Profile + wallet
+information
+
+PUBLIC PROFILE
+
+Example:
+
+@idris Designer • AI • YouTube
+
+Send me a paid message
+
+$2 USDC
+
+[ Write your message ]
+
+[ Pay & Send ]
+
+Small explanation: “Your message is delivered after payment is
+confirmed.”
+
+Do not overwhelm users with blockchain terminology.
+
+CREATOR DASHBOARD
+
+Show: - Balance - Total earned - Messages received - Unread messages
+
+Message list: NEW From @john $2 “Hey Idriss, I wanted to ask…”
+
+Message detail: - Full message - Payment status - Transaction link -
+Reply box
+
+WALLET UX
+
+Show: Wallet 0x83…91A
+
+Balance: $12.00
+
+Advanced: View transaction View wallet address
+
+Do not expose seed phrases unless the selected wallet provider’s
+official recovery/export system requires it.
+
+ERROR HANDLING
+
+Handle: - X login failure - OAuth callback failure - wallet creation
+failure - wallet unavailable - insufficient testnet token - insufficient
+gas - rejected transaction - transaction reverted - transaction
+pending - transaction not found - wrong network - duplicate payment -
+insufficient payment amount - creator unavailable - database failure -
+blockchain RPC failure
+
+Use understandable messages.
+
+Example: “Your payment hasn’t been confirmed yet. Please wait a moment.”
+
+Not: “RPC receipt timeout exception.”
+
+SECURITY
+
+-   Never store private keys
+-   Never store seed phrases
+-   Never derive wallets from X usernames
+-   Never trust frontend payment status
+-   Never trust client-provided creator wallet addresses
+-   Never trust client-provided token addresses
+-   Never put private messages on-chain
+-   Validate payment data server-side
+-   Prevent duplicate payments
+-   Prevent replay
+-   Protect API routes
+-   Use secure cookies/session management
+-   Validate OAuth state and PKCE
+-   Use environment variables for secrets
+-   Never commit secrets
+-   Add basic rate limiting
+-   Sanitize message input
+-   Prevent XSS
+-   Prevent SQL injection
+-   Restrict database access appropriately
+-   Use OpenZeppelin contracts
+-   Do not deploy untested contracts to mainnet
+-   Do not claim the smart contract is audited
+
+ENVIRONMENT VARIABLES
+
+Create .env.example with placeholders only.
+
+Possible variables:
+
+NEXT_PUBLIC_APP_URL= DATABASE_URL= SUPABASE_URL= SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+X_CLIENT_ID= X_CLIENT_SECRET= X_REDIRECT_URI=
+
+WALLET_PROVIDER_APP_ID= WALLET_PROVIDER_CLIENT_ID=
+WALLET_PROVIDER_SECRET=
+
+ROBINHOOD_TESTNET_RPC_URL= ROBINHOOD_TESTNET_CHAIN_ID=
+
+PAIDDM_CONTRACT_ADDRESS= PAYMENT_TOKEN_ADDRESS=
+
+PLATFORM_WALLET_ADDRESS=
+
+Never put real secrets into source code.
+
+DEVELOPMENT WORKFLOW
+
+PHASE 0 — VERIFY DOCUMENTATION
+
+Before coding: 1. Verify current Robinhood Chain testnet docs. 2. Verify
+testnet chain ID. 3. Verify testnet RPC. 4. Verify testnet explorer. 5.
+Verify testnet faucet. 6. Verify supported testnet payment token. 7.
+Verify exact token address. 8. Verify current X OAuth documentation. 9.
+Verify current embedded-wallet provider documentation. 10. Select a
+provider that genuinely supports the required flow.
+
+Print a short “Verified configuration” section before implementation.
+
+PHASE 1 — UI Build landing, login, public profile, dashboard, message
+page using mock data.
+
+PHASE 2 — X LOGIN Implement real X OAuth and test: Continue with X ->
+callback -> user account -> session
+
+PHASE 3 — DATABASE Create migrations/schema and connect real data.
+
+PHASE 4 — EMBEDDED WALLET Implement the selected provider. After X
+login, create/load wallet and save address.
+
+PHASE 5 — ROBINHOOD TESTNET Configure chain, RPC, wallet, and token. Use
+faucet assets.
+
+PHASE 6 — SMART CONTRACT Write contract, test locally, deploy to testnet
+with faucet ETH, verify on explorer.
+
+PHASE 7 — PAYMENT Write message -> create pending payment -> token
+approval if necessary -> call payment contract -> wait -> backend
+verifies -> message becomes PAID -> creator sees it.
+
+PHASE 8 — END-TO-END TEST
+
+Use at least two accounts.
+
+Creator: @idris
+
+Sender: @testuser
+
+Test: 1. @idris logs in 2. @idris sets $2 price 3. @testuser logs in 4.
+@testuser obtains wallet 5. @testuser obtains testnet gas 6. @testuser
+obtains test token 7. @testuser visits @idris 8. @testuser writes
+message 9. @testuser pays 10. Blockchain confirms 11. Backend verifies
+12. @idris sees message 13. @idris replies
+
+TESTING
+
+Write tests for:
+
+Smart contract: - correct payment - insufficient payment - wrong token -
+duplicate message ID - invalid creator - fee calculation if enabled -
+event emission
+
+Backend: - OAuth callback - unauthorized dashboard access - payment
+verification - duplicate transaction - wrong chain - wrong token -
+incorrect amount
+
+Frontend: - login - wallet state - message submission - payment
+pending - payment success - payment failure
+
+FREE-TIER DISCIPLINE
+
+Do not accidentally introduce paid services.
+
+If a service requires billing information or a paid plan, identify it
+before using it.
+
+Prefer: - free testnet - faucet - free Supabase tier - free Vercel
+tier - free wallet-provider tier - free X login/identity functionality -
+public/free RPC
+
+No custom domain required for MVP.
+
+Use a free subdomain initially.
+
+PRODUCTION LATER
+
+Do NOT implement mainnet yet.
+
+When V1 works, document: - mainnet contract deployment - real ETH for
+deployment gas - production RPC - wallet provider production plan if
+limits are exceeded - production database/hosting - domain -
+monitoring - security review/audit - abuse prevention - legal/compliance
+review - possible X API costs outside authentication - supported
+production stablecoin - user gas UX - possible account
+abstraction/paymaster
+
+Separate USER COSTS from PLATFORM COSTS.
+
+IMPORTANT UX PRINCIPLE
+
+PaidDM should feel like Web2 even though payment happens on-chain.
+
+The user should see: “Pay $2”
+
+not: “Execute ERC-20 transferFrom on Robinhood Chain.”
+
+Blockchain details should be available but not forced into the main
+flow.
+
+AI CODING RULES
+
+1.  Never fabricate undocumented Robinhood Chain information.
+2.  Never fabricate token addresses.
+3.  Never fabricate X API requirements.
+4.  Never fabricate wallet-provider capabilities.
+5.  Verify before coding.
+6.  If documentation changes, use current official documentation.
+7.  Keep the architecture simple.
+8.  Do not over-engineer.
+9.  Explain every external account/API key I need.
+10. Clearly identify which accounts are free.
+11. Tell me exactly where each environment variable comes from.
+12. Keep all secrets out of Git.
+13. Use testnet until I explicitly request mainnet.
+14. Do not use real money.
+15. Do not put private messages on-chain.
+16. Do not build custom key management.
+17. Do not claim production security/audit status.
+
+FIRST RESPONSE REQUIRED
+
+Before writing significant code, give me:
+
+A. VERIFIED CURRENT CONFIGURATION Robinhood: - testnet chain ID -
+testnet RPC - testnet explorer - faucet - native gas token - supported
+testnet payment token - exact token address - token decimals
+
+X: - OAuth method - required scopes - developer-console setup - whether
+login requires payment
+
+Wallet: - selected provider - why selected - current free-tier limits -
+Robinhood compatibility - X compatibility
+
+B. REQUIRED ACCOUNTS For every account: - URL - purpose - free or paid -
+credit card requirement - credentials needed
+
+C. $0 CHECK Explicitly confirm whether I can complete the testnet MVP
+without spending my own money.
+
+D. PROJECT STRUCTURE Show the proposed file/folder structure.
+
+E. THEN START IMPLEMENTING Do not dump the entire project into one
+response. Build phase by phase and keep the application runnable after
+every major phase.
+
+FINAL GOAL
+
+X login ↓ PaidDM account ↓ Automatic embedded wallet ↓ Robinhood Chain
+testnet ↓ Creator sets DM price ↓ Another user writes private message ↓
+User pays with testnet token ↓ Blockchain confirms ↓ Backend verifies
+payment ↓ Creator receives private message ↓ Creator replies
+
+All without the developer spending real money during testnet
+development.
+
+END OF MASTER BUILD PROMPT
